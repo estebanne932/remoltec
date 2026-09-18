@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Remoltec | Sitio en mantenimiento</title>
+<link rel="icon" href="PICTO.png" />
+<meta name="description" content="Estamos haciendo mejoras en el sitio de Remoltec. Volvemos muy pronto.">
+<meta name="theme-color" content="#000000">
+
+<!-- Tipografía: cámbiala aquí y en las variables --display / --body del CSS -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500&family=Big+Shoulders+Display:wght@800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* Paleta Remoltec */
+    --red: #C41E23;
+    --red-deep: #9D1318;
+    --black: #000000;
+    --amber: #FBB117;
+    --steel: #E5E5E5;
+
+    --display: "Big Shoulders Display", Impact, "Arial Narrow", sans-serif;
+    --body: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+    --tape: 17px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--steel);
+    font-family: var(--body);
+    font-synthesis: none;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--red); color: #fff; }
+  a:focus-visible { outline: 3px solid var(--amber); outline-offset: 4px; }
+
+  /* Relleno: el mismo video, desenfocado y oscurecido, para cubrir los bordes */
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: var(--black) url("poster.jpg") center / cover no-repeat;
+    filter: blur(28px) brightness(.42) saturate(1.1);
+    transform: scale(1.12);
+  }
+
+  .page {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: var(--tape);
+  }
+
+  /* Video: se ajusta completo (sin recortar el logo) y sus bordes se difuminan */
+  .stage {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+  .stage video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    -webkit-mask-image:
+      linear-gradient(to right, transparent, #000 7%, #000 93%, transparent),
+      linear-gradient(to bottom, transparent, #000 5%, #000 84%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to right, transparent, #000 7%, #000 93%, transparent),
+      linear-gradient(to bottom, transparent, #000 5%, #000 84%, transparent);
+    mask-composite: intersect;
+  }
+
+  /* Mensaje */
+  .panel {
+    position: relative;
+    margin-top: -3.5rem;
+    padding: 0 1.5rem 2.25rem;
+    text-align: center;
+    background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.82) 3.5rem);
+    animation: reveal .8s ease-out both;
+  }
+  h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(2.5rem, 1.9rem + 3.3vw, 5rem);
+    line-height: .95;
+    letter-spacing: .005em;
+    text-wrap: balance;
+    color: var(--steel);
+  }
+  .panel p {
+    margin: .9rem auto 0;
+    max-width: 30em;
+    font-weight: 500;
+    font-size: clamp(1rem, .94rem + .35vw, 1.25rem);
+    line-height: 1.45;
+    text-wrap: balance;
+    color: rgba(229, 229, 229, .8);
+  }
+
+  /* Contacto (opcional, ver comentario en el HTML) */
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .5rem 1.75rem;
+    margin-top: 1.4rem;
+    font-weight: 500;
+  }
+  .contact a {
+    color: var(--amber);
+    text-decoration: none;
+    border-bottom: 2px solid var(--red);
+    padding-bottom: 2px;
+  }
+  .contact a:hover { border-bottom-color: var(--amber); }
+
+  /* Cinta de precaución */
+  .tape {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: var(--tape);
+    border-top: 3px solid var(--red);
+    background: repeating-linear-gradient(-45deg,
+      var(--amber) 0 14px, var(--black) 14px 28px);
+  }
+
+  /* Pantallas verticales (celular): video en su proporción, todo centrado */
+  @media (max-aspect-ratio: 4/3) {
+    .backdrop { background-position: 4% 50%; }
+    .page { justify-content: center; }
+    .stage { flex: none; aspect-ratio: 16 / 9; }
+    .stage video {
+      -webkit-mask-image:
+        linear-gradient(to right, transparent, #000 7%, #000 93%, transparent),
+        linear-gradient(to bottom, transparent, #000 14%, #000 80%, transparent);
+      mask-image:
+        linear-gradient(to right, transparent, #000 7%, #000 93%, transparent),
+        linear-gradient(to bottom, transparent, #000 14%, #000 80%, transparent);
+    }
+    .panel { margin-top: -.5rem; padding-bottom: 1.5rem; background: none; }
+  }
+
+  /* Celular horizontal (poca altura): video a la izquierda, mensaje a la derecha */
+  @media (max-height: 480px) and (orientation: landscape) {
+    .page { flex-direction: row; align-items: center; }
+    .stage { flex: 0 0 60%; align-self: stretch; }
+    .panel {
+      flex: 1;
+      margin: 0;
+      padding: 1rem 1.5rem 1rem .5rem;
+      background: none;
+      text-align: left;
+    }
+    h1 { font-size: 1.9rem; }
+    .panel p { margin: .5rem 0 0; font-size: .95rem; max-width: none; }
+    .contact { justify-content: flex-start; }
+  }
+
+  @keyframes reveal { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .panel { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <div class="page">
+    <div class="stage" aria-hidden="true">
+      <video autoplay muted loop playsinline preload="auto"
+             poster="poster.jpg" tabindex="-1"
+             disablepictureinpicture disableremoteplayback>
+        <source src="remoltec-video.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <main class="panel">
+      <h1>PROXIMAMENTE</h1>
+      <p>Todo lo que necesitas para tus remolques, en un solo lugar.</p>
+
+      <!-- Contacto (opcional): quita las marcas de comentario y edita los datos
+      <div class="contact">
+        <a href="https://wa.me/52XXXXXXXXXX">WhatsApp</a>
+        <a href="mailto:correo@tudominio.com">correo@tudominio.com</a>
+      </div>
+      -->
+    </main>
+  </div>
+
+  <div class="tape" aria-hidden="true"></div>
+
+  <script>
+    // Respeta a quien pide menos movimiento: deja solo el póster
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const v = document.querySelector(".stage video");
+      v.removeAttribute("autoplay");
+      v.pause();
+    }
+  </script>
+</body>
+</html>
